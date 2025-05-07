@@ -15,16 +15,6 @@ func2::~func2()
 {
     delete ui;
 }
-#if 0
-void func2::on_input_valueChanged(int check_falg)
-{
-    QByteArray data;
-    data.append(reinterpret_cast<const char*>(&check_falg), sizeof(int));
-
-    int out = data_to_int(data);
-    ui->output->append(QString::number(out));
-}
-#endif
 
 struct MessageHeader {
     uint8_t type{0x42};
@@ -36,13 +26,19 @@ struct MessageHeader {
 
 void func2::read_msg()
 {
+    // QDataStream in(&buffer, QIODevice::ReadOnly);
+    // in.setVersion(QDataStream::Qt_5_15);
+    // ...
+    // while (!in.atEnd()) {
+    //     in >> out;
     while (socket.hasPendingDatagrams())
     {
         QByteArray buffer;
         QHostAddress ip;
         buffer.resize(socket.pendingDatagramSize());
         socket.readDatagram(buffer.data(), buffer.size(), &ip);
-        int type = data_to_int(buffer.mid(0, sizeof(int)));
+        int type;
+        memcpy(&type, buffer.mid(0, sizeof(int)).constData(), sizeof(int));
         if (type < 0 || type > 2) {
             ui->output_1->setText(QString("Wrong type: %1").arg(type));
             return;
@@ -53,7 +49,8 @@ void func2::read_msg()
         QString str = QString("--------%1: %2, cnt: %3\n").arg(type).arg(pre_flag[type]).arg(cnt);
         int offset = sizeof(int);
         for (int i = 0; i < cnt; i++) {
-            auto out = data_to_int(buffer.mid(offset, sizeof(int)));
+            int out;
+            memcpy(&out, buffer.mid(offset, sizeof(int)).constData(), sizeof(int));
             offset += sizeof(int);
             str += QString::number(out) + "\n";
 
@@ -62,7 +59,7 @@ void func2::read_msg()
                 MessageHeader header;
                 QByteArray datagram;
                 QDataStream out(&datagram, QIODevice::WriteOnly);
-                // out.setVersion(QDataStream::Qt_5_15);
+                out.setVersion(QDataStream::Qt_5_15);
                 header.req_id = 3;
                 header.length = out_short + ui->input->value();
                 out << header.type << header.flag << header.command << header.length << header.req_id;
@@ -74,12 +71,5 @@ void func2::read_msg()
         output[type]->append(str);
         output[type]->moveCursor(QTextCursor::End);
     }
-}
-
-int func2::data_to_int(QByteArray data)
-{
-    int out;
-    memcpy(&out, data.constData(), sizeof(int));
-    return out;
 }
 
