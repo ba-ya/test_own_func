@@ -15,16 +15,22 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 include_directories(
         1/
         2/
+        3/
 )
 
 set(PROJECT_SOURCES
         main.cpp
-        1/func1.cpp
-        1/func1.h
-        1/func1.ui
+        3/func3.cpp
+        3/func3.h
+        3/func3.ui
+
         2/func2.cpp
         2/func2.h
         2/func2.ui
+
+        1/func1.cpp
+        1/func1.h
+        1/func1.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

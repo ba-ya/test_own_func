@@ -1,13 +1,20 @@
 ﻿#include "func1.h"
 #include "func2.h"
+#include "func3.h"
 
 #include <QApplication>
 
-#define test2
+#define test3
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+#ifdef test3
+    /// func 3, dock_widget, only mainwindow can use
+    func3 w;
+    w.show();
+#endif
+
 #ifdef test2
     /// func 2, 端口设置30003,接收QbyteArray,转成int,再显示到textBrower
     func2 w;
