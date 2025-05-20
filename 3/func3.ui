@@ -30,6 +30,7 @@
     <addaction name="action_sudoku"/>
     <addaction name="action_v"/>
     <addaction name="action_h"/>
+    <addaction name="action_tab"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -158,6 +159,11 @@
   <action name="action_h">
    <property name="text">
     <string>水平</string>
+   </property>
+  </action>
+  <action name="action_tab">
+   <property name="text">
+    <string>嵌套</string>
    </property>
   </action>
  </widget>

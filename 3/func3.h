@@ -23,6 +23,10 @@ private:
     void layout_chain(const QList<QDockWidget*> &dock,
                       const QList<int> &size,
                       Qt::Orientation orientation);
+    void layout_nest(const QList<QDockWidget*> dock);
+
+    void remove_docks(const QList<QDockWidget*> dock);
+
 private:
     Ui::func3 *ui;
     QList<QDockWidget*> docks;

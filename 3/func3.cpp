@@ -44,16 +44,27 @@ void func3::init_dock()
 void func3::init_action()
 {
     connect(ui->action_sudoku, &QAction::triggered, this, [this]() {
+        remove_docks(docks);
         layout_chain({docks[3], docks[4], docks[5]}, {2, 1, 2}, Qt::Horizontal);
         layout_chain({docks[0], docks[1], docks[2]}, {1, 1, 1}, Qt::Horizontal);
-        layout_chain({docks[6], docks[7], docks[8]}, {1, 1, 1}, Qt::Horizontal);
+        layout_chain({docks[6], docks[7]/*, docks[8]*/}, {1, 1/*, 1*/}, Qt::Horizontal);
         resizeDocks({docks[0], docks[3], docks[6]}, {1, 1, 1}, Qt::Vertical);
     });
     connect(ui->action_v, &QAction::triggered, this, [this]() {
+        remove_docks(docks);
         layout_chain(docks, QList<int>(9, 1), Qt::Horizontal);
     });
     connect(ui->action_h, &QAction::triggered, this, [this]() {
+        remove_docks(docks);
         layout_chain(docks, QList<int>(9, 1), Qt::Vertical);
+    });
+    connect(ui->action_tab, &QAction::triggered, this, [this]() {
+        remove_docks(docks);
+        // layout h or v
+        layout_chain({docks[3], docks[0], docks[6]}, QList<int>(3, 1), Qt::Horizontal);
+        // nest
+        layout_nest({docks[3], docks[4], docks[5]});
+        layout_nest({docks[0], docks[1], docks[2]});
     });
 }
 
@@ -71,4 +82,24 @@ void func3::layout_chain(const QList<QDockWidget *> &dock, const QList<int> &siz
     }
     // layout
     resizeDocks(dock, size, orientation);
+}
+
+void func3::layout_nest(const QList<QDockWidget *> dock)
+{
+    // show
+    for (auto &w : dock) {
+        w->show();
+    }
+    // tab
+    auto &fitst = dock[0];
+    for (int i = 1; i < dock.size(); i++) {
+        tabifyDockWidget(fitst, dock[i]);
+    }
+}
+
+void func3::remove_docks(const QList<QDockWidget *> dock)
+{
+    for (auto item : dock) {
+        removeDockWidget(item);
+    }
 }
