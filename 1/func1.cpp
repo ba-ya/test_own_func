@@ -25,7 +25,7 @@ void MainWindow::on_ap_valueChanged(int apeture)
 
 void MainWindow::check_apeture(const QString &board_type, int apeture)
 {
-    int board_ap = board_type.left(2).toInt();
+    int board_ap = board_type.mid(0, 2).toInt();
     bool is_valid = apeture <= board_ap;
     ui->flag->setChecked(is_valid);
     qDebug() << "board_apeture:" << board_ap << "apeture:" << apeture << "valid:" << is_valid;

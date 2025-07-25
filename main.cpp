@@ -4,11 +4,28 @@
 
 #include <QApplication>
 
-#define test3
+#define test1
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+#ifdef test4
+#endif
+    /// func4, console
+    /// 左边"项目"-"运行"-勾选"在终端中运行"
+    QTextStream input(stdin);
+    QString line;
+
+    qDebug() << "Please enter commands like: t:";
+    qDebug() << "Type 'exit' or 'q' to quit.";
+    while (true) {
+        line = input.readLine();  // 读取一行输入
+
+        if (line.trimmed() == "exit" || line.trimmed() == "q") {
+            break;  // 如果用户输入 'exit'，退出程序
+        }
+
+    }
 #ifdef test3
     /// func 3, dock_widget, only mainwindow can use
     func3 w;
