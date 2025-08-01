@@ -1,16 +1,18 @@
-﻿#include "func1.h"
-#include "func2.h"
-#include "func3.h"
-
+﻿#include "headers.h"
 #include <QApplication>
 
-#define test1
+#define test4
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 #ifdef test4
+    // sdk, 解析json格式的tof,并设置到lawinfo里面
+    func4 w;
+    w.show();
 #endif
+
+#ifdef test00
     /// func4, console
     /// 左边"项目"-"运行"-勾选"在终端中运行"
     QTextStream input(stdin);
@@ -26,6 +28,8 @@ int main(int argc, char *argv[])
         }
 
     }
+#endif
+
 #ifdef test3
     /// func 3, dock_widget, only mainwindow can use
     func3 w;

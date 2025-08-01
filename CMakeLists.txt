@@ -16,10 +16,16 @@ include_directories(
         1/
         2/
         3/
+        4/
 )
 
 set(PROJECT_SOURCES
         main.cpp
+        4/func4.cpp
+        4/func4.h
+        4/func4.ui
+        4/parameter_tof_json.h
+
         3/func3.cpp
         3/func3.h
         3/func3.ui
@@ -31,6 +37,7 @@ set(PROJECT_SOURCES
         1/func1.cpp
         1/func1.h
         1/func1.ui
+        headers.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
