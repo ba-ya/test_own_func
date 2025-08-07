@@ -1,6 +1,7 @@
 #include "func4.h"
 #include "ui_func4.h"
 #include "parameter_tof_json.h"
+#include <QJsonArray>
 #include <random>
 
 func4::func4(QWidget *parent) :
@@ -34,6 +35,9 @@ void func4::init()
         auto cnt_beam = ui->spinBox_cnt_beam->value();
         fill_table(cnt_beam, cnt_id_trans);
     });
+
+    ui->spinBox_cnt_beam->setValue(12);
+    ui->spinBox_cnt_id_trans->setValue(3);
 }
 
 void func4::on_btn_create_released()
@@ -44,16 +48,16 @@ void func4::on_btn_create_released()
         auto cnt_beam = ui->table->rowCount();;
         QJsonObject group_obj;
         for (int j = 0; j < cnt_beam; ++j) {
-            QJsonObject beam_obj;
+            QJsonArray beam_array;
             auto parts = ui->table->item(j, 1)->text().split(";");
             auto cnt_id_trans = parts.size() - 1;
             for (int k = 0; k < cnt_id_trans; k++) {
-                auto id_trans = parts[k].split(":");
-                auto k_id = id_trans.first();
-                auto k_value = id_trans.last().toInt();
-                beam_obj[QString("id trans %1").arg(k_id)] = k_value;
+                auto k_value = parts[k].toInt();
+                QJsonObject id_trans_obj;
+                id_trans_obj[QString("id_trans %1").arg(k)] = k_value;
+                beam_array.push_back(id_trans_obj);
             }
-            group_obj[QString("beam %1").arg(j)] = beam_obj;
+            group_obj[QString("beam %1").arg(j)] = beam_array;
         }
         root[QString("group %1").arg(i)] = group_obj;
     }
@@ -73,7 +77,7 @@ QString func4::create_id_trans(int pair)
     std::uniform_int_distribution<> dist(0, 99);
     QString info;
     for (int i = 0; i < pair; i++) {
-        info += QString("%1:%2;").arg(i).arg(dist(gen));
+        info += QString("%1;").arg(dist(gen));
     }
     return info;
 }

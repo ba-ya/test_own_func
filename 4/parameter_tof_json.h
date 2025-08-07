@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QMap>
+#include <qjsonarray.h>
 #include <qjsonobject.h>
 // #include "tb_hal_pa_config.h"
 
@@ -28,87 +29,59 @@ struct TofJsonManger {
         }
         // save as file
         auto doc = QJsonDocument::fromJson(json_data);
-        save_to_file("./tof.json", doc);
+        save_to_file("./tof_recv.json", doc);
         // store
         if (!doc.isObject()) {
             qWarning() << "Invalid JSON format";
             return false;
         }
-        auto &&check_size = [](const QJsonObject &obj) {
-            std::vector<int> cnts;
-            for (auto &key : obj.keys()) {
-                auto sub_obj = obj[key].toObject();
-                cnts.push_back(sub_obj.count());
-            }
-            std::sort(cnts.begin(), cnts.end());
-            return cnts.front() == cnts.back();
-        };
-        auto &&check_continuity = [this](QStringList keys) {
-            std::vector<int> values;
-            for (auto &key : keys) {
-                auto id  = get_id(key);
-                values.push_back(id);
-            }
-            // sort
-            std::sort(values.begin(), values.end());
-            bool flag = true;
-            for (int i = 0; i < values.size() - 1; ++i) {
-                if (values[i + 1] - values[i] != 1) {
-                    flag = false;
-                    break;
-                }
-            }
-            return flag;
-        };
-
         auto root = doc.object();
-        for (auto &key : root.keys()) {
+        for (auto group_it = root.begin(); group_it != root.end(); ++group_it) {
+            auto group_id = get_id(group_it.key());
+            auto group_obj = group_it.value().toObject();
             QMap<int, tb::hal::LawInfo> laws;
-            auto group_obj = root[key].toObject();
-            if (!check_size(group_obj)) {
-                qDebug() << "apeture not equel";
-                return false;
-            }
-            for (auto &beam_key : group_obj.keys()) {
-                auto beam_obj = group_obj[beam_key].toObject();
-                if (!check_continuity(beam_obj.keys())) {
-                    qDebug() << "id trans not continuous";
-                    return false;
-                }
+            for (auto beam_it = group_obj.begin(); beam_it != group_obj.end(); ++beam_it) {
+                auto beam_id = get_id(beam_it.key());
+                auto beam_array = beam_it.value().toArray();
                 QMap<int, int> tofs;
                 auto min_value = std::numeric_limits<int>::max();
                 auto max_value = std::numeric_limits<int>::min();
-                for (auto &trans_key : beam_obj.keys()) {
-                    auto trans_id = get_id(trans_key);
-                    auto tof = beam_obj[trans_key].toInt();
-                    tofs[trans_id] = tof;
-                    if (tof > max_value)
-                        max_value = tof;
-                    if (tof < min_value)
-                        min_value = tof;
+                for (auto id_trans_it = beam_array.begin(); id_trans_it != beam_array.end(); ++id_trans_it) {
+                    auto id_trans_obj = id_trans_it->toObject();
+                    for (auto id_trans = id_trans_obj.begin(); id_trans != id_trans_obj.end(); ++id_trans) {
+                        auto trans_id = get_id(id_trans.key());
+                        auto tof = id_trans.value().toInt();
+                        tofs[trans_id] = tof;
+                        if (tof > max_value)
+                            max_value = tof;
+                        if (tof < min_value)
+                            min_value = tof;
+                    }
+
                 }
                 tb::hal::LawInfo law;
-                for (auto &v : tofs.values()) {
-                    law.elem_time.push_back(v);
+                for (auto tof_it = tofs.cbegin(); tof_it != tofs.cend(); ++tof_it) {
+                    law.elem_time.push_back(tof_it.value());
                 }
                 law.elem_min_time = min_value;
                 law.elem_max_time = max_value;
-                auto beam_id = get_id(beam_key);
                 laws[beam_id] = law;
             }
-            auto id = get_id(key);
-            law_infos[id] = laws;
+            law_infos[group_id] = laws;
         }
-        for (auto &id : law_infos.keys()) {
-            qDebug() << "------group_id" << id;
-            auto rst = get_law_infos(id);
+#if 1
+        for (auto it = law_infos.cbegin(); it != law_infos.cend(); ++it) {
+            auto group_id = it.key();
+            qDebug() << "------------group_id" << group_id;
+            auto rst = get_law_infos(group_id);
             int i = 0;
             for (auto &tofs : rst) {
-                qDebug() << "------beam_id" << i++;
+                qDebug() << "------------beam_id" << i++;
                 qDebug() << "max:" << tofs.elem_max_time << "min" << tofs.elem_min_time;
                 qDebug() << tofs.elem_time;
             }
         }
+#endif
 
         return true;
     }
