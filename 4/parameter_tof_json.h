@@ -102,6 +102,18 @@ struct TofJsonManger {
         return rst_laws;
     }
 
+    QByteArray load_from_file(const QString &file_path) {
+        QFile file(file_path);
+        if (!file.open(QIODevice::ReadOnly)) {
+            qWarning() << "Failed to open file for reading!";
+            return QByteArray();
+        }
+
+        QByteArray jsonData = file.readAll();
+        file.close();
+
+        return jsonData;
+    }
 private:
     bool save_to_file(const QString &file_path, QJsonDocument &doc) {
         QFile file(file_path);
@@ -113,6 +125,7 @@ private:
         }
         return true;
     }
+
 
     int get_id(const QString &key) {
         return key.split(" ").last().toInt();

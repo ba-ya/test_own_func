@@ -20,10 +20,13 @@ public:
 
 private slots:
     void on_btn_create_released();
+    void load_file();
 
 private:
     QString create_id_trans(int pair);
     void fill_table(int cnt_beam, int cnt_id_trans);
+
+    void push_data(QByteArray data);
 
 private:
     Ui::func4 *ui;

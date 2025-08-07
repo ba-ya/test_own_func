@@ -1,6 +1,7 @@
 #include "func4.h"
 #include "ui_func4.h"
 #include "parameter_tof_json.h"
+#include <QFileDialog>
 #include <QJsonArray>
 #include <random>
 
@@ -36,6 +37,13 @@ void func4::init()
         fill_table(cnt_beam, cnt_id_trans);
     });
 
+    // load
+    auto act = new QAction();
+    act->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen));
+    ui->lineEdit_load->addAction(act, QLineEdit::TrailingPosition);
+    connect(act, &QAction::triggered, this, &func4::load_file);
+
+    // init
     ui->spinBox_cnt_beam->setValue(12);
     ui->spinBox_cnt_id_trans->setValue(3);
 }
@@ -63,11 +71,18 @@ void func4::on_btn_create_released()
     }
     QJsonDocument doc(root);
     auto bytes = doc.toJson();
-    auto data_0 = bytes.mid(0, bytes.size() / 2);
-    auto data_1 = bytes.mid(bytes.size() / 2, bytes.size() / 2);
-    manger.push_data(11, data_1);
-    manger.push_data(10, data_0);
-    manger.completed();
+    push_data(bytes);
+}
+
+void func4::load_file()
+{
+    auto file_path = QFileDialog::getOpenFileName(this, tr("Files"), QDir::currentPath(), "*.*");
+    if (file_path.isEmpty()) {
+        return;
+    }
+    ui->lineEdit_load->setText(file_path);
+    auto data = manger.load_from_file(file_path);
+    push_data(data);
 }
 
 QString func4::create_id_trans(int pair)
@@ -90,4 +105,13 @@ void func4::fill_table(int cnt_beam, int cnt_id_trans)
         auto info = create_id_trans(cnt_id_trans);
         ui->table->setItem(i, 1, new QTableWidgetItem(info));
     }
+}
+
+void func4::push_data(QByteArray data)
+{
+    auto data_0 = data.mid(0, data.size() / 2);
+    auto data_1 = data.mid(data.size() / 2, data.size() / 2);
+    manger.push_data(11, data_1);
+    manger.push_data(10, data_0);
+    manger.completed();
 }
