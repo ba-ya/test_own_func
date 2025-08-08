@@ -19,9 +19,13 @@ public:
 private slots:
     void read_msg();
 
+    void on_btn_send_released();
+
 private:
     Ui::TestUdpHeart_2 *ui;
     QUdpSocket socket;
+    QUdpSocket socket_send;
+    int cnt = 0;
 };
 
 #endif // TESTUDPHEART_2_H

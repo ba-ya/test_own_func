@@ -1,6 +1,8 @@
 ﻿#include "TestUdpHeart_2.h"
 #include "ui_TestUdpHeart_2.h"
 
+#include <random>
+
 TestUdpHeart_2::TestUdpHeart_2(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TestUdpHeart_2)
@@ -71,5 +73,23 @@ void TestUdpHeart_2::read_msg()
         output[type]->append(str);
         output[type]->moveCursor(QTextCursor::End);
     }
+}
+
+
+void TestUdpHeart_2::on_btn_send_released()
+{
+    QByteArray datagram;
+    datagram.append(reinterpret_cast<const char*>(&cnt), sizeof(cnt));
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, 99);
+    auto random_v = dist(gen);
+    datagram.append(reinterpret_cast<const char*>(&random_v), sizeof(random_v));
+    auto ip = QHostAddress("127.0.0.1");
+    if (cnt > 2) {
+        cnt = 0;
+    }
+    socket_send.writeDatagram(datagram, ip, 30003);
 }
 
