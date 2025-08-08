@@ -6,9 +6,9 @@ func2::func2(QWidget *parent) :
     ui(new Ui::func2)
 {
     ui->setupUi(this);
+    setWindowTitle("func2");
     socket.bind(QHostAddress::Any, 30003);
     connect(&socket, &QUdpSocket::readyRead, this, &func2::read_msg);
-
 }
 
 func2::~func2()

@@ -8,6 +8,7 @@ func3::func3(QWidget *parent) :
     ui(new Ui::func3)
 {
     ui->setupUi(this);
+    setWindowTitle("func3");
     init();
 }
 
