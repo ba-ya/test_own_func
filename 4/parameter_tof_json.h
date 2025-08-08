@@ -70,17 +70,30 @@ struct TofJsonManger {
             law_infos[group_id] = laws;
         }
 #if 1
+        QJsonObject root2;
         for (auto it = law_infos.cbegin(); it != law_infos.cend(); ++it) {
+            QJsonObject group_obj;
             auto group_id = it.key();
-            qDebug() << "------------group_id" << group_id;
+            // qDebug() << "------------group_id" << group_id;
             auto rst = get_law_infos(group_id);
-            int i = 0;
-            for (auto &tofs : rst) {
-                qDebug() << "------------beam_id" << i++;
-                qDebug() << "max:" << tofs.elem_max_time << "min" << tofs.elem_min_time;
-                qDebug() << tofs.elem_time;
+            int beam_id = 0;
+            for (auto beam_id = 0; beam_id < rst.size(); beam_id++) {
+                auto tofs = rst[beam_id];
+                QJsonArray beam_array;
+                // qDebug() << "------------beam_id" << beam_id;
+                // qDebug() << "max:" << tofs.elem_max_time << "min" << tofs.elem_min_time;
+                for (auto trans_id = 0; trans_id < tofs.elem_time.size(); ++trans_id) {
+                    QJsonObject id_trans_obj;
+                    auto tof = tofs.elem_time[trans_id];
+                    id_trans_obj[QString("id_trans %1").arg(trans_id)] = tof;
+                    beam_array.push_back(id_trans_obj);
+                }
+                group_obj[QString("beam %1").arg(beam_id)] = beam_array;
             }
+            root2[QString("group %1").arg(group_id)] = group_obj;
         }
+        QJsonDocument doc2(root2);
+        save_to_file("./tof_from_lawinfo.json", doc2);
 #endif
 
         return true;
