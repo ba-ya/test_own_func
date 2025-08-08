@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>func3</class>
- <widget class="QMainWindow" name="func3">
+ <class>TestDockWidget_3</class>
+ <widget class="QMainWindow" name="TestDockWidget_3">
   <property name="geometry">
    <rect>
     <x>0</x>

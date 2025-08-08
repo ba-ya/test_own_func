@@ -1,9 +1,9 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
-#include "func1.h"
-#include "func2.h"
-#include "func3.h"
-#include "func4.h"
+#include "TestApertureCheck_1.h"
+#include "TestUdpHeart_2.h"
+#include "TestDockWidget_3.h"
+#include "TestJsonToLawinfo_4.h"
 
 #endif // HEADERS_H

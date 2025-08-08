@@ -1,20 +1,20 @@
-#ifndef FUNC4_H
-#define FUNC4_H
+#ifndef TESTJSONTOLAWINFO_4_H
+#define TESTJSONTOLAWINFO_4_H
 
 #include "parameter_tof_json.h"
 #include <QWidget>
 
 namespace Ui {
-class func4;
+class TestJsonToLawinfo_4;
 }
 
-class func4 : public QWidget
+class TestJsonToLawinfo_4 : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit func4(QWidget *parent = nullptr);
-    ~func4();
+    explicit TestJsonToLawinfo_4(QWidget *parent = nullptr);
+    ~TestJsonToLawinfo_4();
 
     void init();
 
@@ -29,8 +29,8 @@ private:
     void push_data(QByteArray data);
 
 private:
-    Ui::func4 *ui;
+    Ui::TestJsonToLawinfo_4 *ui;
     TofJsonManger manger;
 };
 
-#endif // FUNC4_H
+#endif // TESTJSONTOLAWINFO_4_H

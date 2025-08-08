@@ -1,30 +1,30 @@
-﻿#include "func3.h"
-#include "ui_func3.h"
+﻿#include "TestDockWidget_3.h"
+#include "ui_TestDockWidget_3.h"
 
 #define CNT_DOCK 9
 
-func3::func3(QWidget *parent) :
+TestDockWidget_3::TestDockWidget_3(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::func3)
+    ui(new Ui::TestDockWidget_3)
 {
     ui->setupUi(this);
-    setWindowTitle("func3");
+    setWindowTitle("TestDockWidget_3");
     init();
 }
 
-func3::~func3()
+TestDockWidget_3::~TestDockWidget_3()
 {
     delete ui;
 }
 
-void func3::init()
+void TestDockWidget_3::init()
 {
     init_dock();
     init_action();
     ui->action_sudoku->trigger();
 }
 
-void func3::init_dock()
+void TestDockWidget_3::init_dock()
 {
     // delete central widget
     QWidget* p = takeCentralWidget();
@@ -42,13 +42,13 @@ void func3::init_dock()
     }
 }
 
-void func3::init_action()
+void TestDockWidget_3::init_action()
 {
     connect(ui->action_sudoku, &QAction::triggered, this, [this]() {
         remove_docks(docks);
-        layout_chain({docks[3], docks[4], docks[5]}, {2, 1, 2}, Qt::Horizontal);
+        layout_chain({docks[3], docks[4], docks[5]}, {1, 1, 1}, Qt::Horizontal);
         layout_chain({docks[0], docks[1], docks[2]}, {1, 1, 1}, Qt::Horizontal);
-        layout_chain({docks[6], docks[7]/*, docks[8]*/}, {1, 1/*, 1*/}, Qt::Horizontal);
+        layout_chain({docks[6], docks[7], docks[8]}, {1, 1, 1}, Qt::Horizontal);
         resizeDocks({docks[0], docks[3], docks[6]}, {1, 1, 1}, Qt::Vertical);
     });
     connect(ui->action_v, &QAction::triggered, this, [this]() {
@@ -69,7 +69,7 @@ void func3::init_action()
     });
 }
 
-void func3::layout_chain(const QList<QDockWidget *> &dock, const QList<int> &size, Qt::Orientation orientation)
+void TestDockWidget_3::layout_chain(const QList<QDockWidget *> &dock, const QList<int> &size, Qt::Orientation orientation)
 {
     // Starting location point
     addDockWidget(Qt::LeftDockWidgetArea, dock[0]);
@@ -85,7 +85,7 @@ void func3::layout_chain(const QList<QDockWidget *> &dock, const QList<int> &siz
     resizeDocks(dock, size, orientation);
 }
 
-void func3::layout_nest(const QList<QDockWidget *> dock)
+void TestDockWidget_3::layout_nest(const QList<QDockWidget *> dock)
 {
     // show
     for (auto &w : dock) {
@@ -98,7 +98,7 @@ void func3::layout_nest(const QList<QDockWidget *> dock)
     }
 }
 
-void func3::remove_docks(const QList<QDockWidget *> dock)
+void TestDockWidget_3::remove_docks(const QList<QDockWidget *> dock)
 {
     for (auto item : dock) {
         removeDockWidget(item);

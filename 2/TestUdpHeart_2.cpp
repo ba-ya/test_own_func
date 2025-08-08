@@ -1,17 +1,17 @@
-﻿#include "func2.h"
-#include "ui_func2.h"
+﻿#include "TestUdpHeart_2.h"
+#include "ui_TestUdpHeart_2.h"
 
-func2::func2(QWidget *parent) :
+TestUdpHeart_2::TestUdpHeart_2(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::func2)
+    ui(new Ui::TestUdpHeart_2)
 {
     ui->setupUi(this);
-    setWindowTitle("func2");
+    setWindowTitle("TestUdpHeart_2");
     socket.bind(QHostAddress::Any, 30003);
-    connect(&socket, &QUdpSocket::readyRead, this, &func2::read_msg);
+    connect(&socket, &QUdpSocket::readyRead, this, &TestUdpHeart_2::read_msg);
 }
 
-func2::~func2()
+TestUdpHeart_2::~TestUdpHeart_2()
 {
     delete ui;
 }
@@ -24,7 +24,7 @@ struct MessageHeader {
     uint16_t req_id{};
 };
 
-void func2::read_msg()
+void TestUdpHeart_2::read_msg()
 {
     // QDataStream in(&buffer, QIODevice::ReadOnly);
     // in.setVersion(QDataStream::Qt_5_15);

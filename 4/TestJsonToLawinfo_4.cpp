@@ -1,25 +1,25 @@
-#include "func4.h"
-#include "ui_func4.h"
+#include "TestJsonToLawinfo_4.h"
+#include "ui_TestJsonToLawinfo_4.h"
 #include "parameter_tof_json.h"
 #include <QFileDialog>
 #include <QJsonArray>
 #include <random>
 
-func4::func4(QWidget *parent) :
+TestJsonToLawinfo_4::TestJsonToLawinfo_4(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::func4)
+    ui(new Ui::TestJsonToLawinfo_4)
 {
     ui->setupUi(this);
-    setWindowTitle("func4");
+    setWindowTitle("TestJsonToLawinfo_4");
     init();
 }
 
-func4::~func4()
+TestJsonToLawinfo_4::~TestJsonToLawinfo_4()
 {
     delete ui;
 }
 
-void func4::init()
+void TestJsonToLawinfo_4::init()
 {
     ui->table->setColumnCount(2);
     ui->table->setHorizontalHeaderLabels({"beam id", "values"});
@@ -42,14 +42,14 @@ void func4::init()
     auto act = new QAction();
     act->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen));
     ui->lineEdit_load->addAction(act, QLineEdit::TrailingPosition);
-    connect(act, &QAction::triggered, this, &func4::load_file);
+    connect(act, &QAction::triggered, this, &TestJsonToLawinfo_4::load_file);
 
     // init
     ui->spinBox_cnt_beam->setValue(12);
     ui->spinBox_cnt_id_trans->setValue(3);
 }
 
-void func4::on_btn_create_released()
+void TestJsonToLawinfo_4::on_btn_create_released()
 {
     QJsonObject root;
     auto cnt_group = 1;
@@ -75,7 +75,7 @@ void func4::on_btn_create_released()
     push_data(bytes);
 }
 
-void func4::load_file()
+void TestJsonToLawinfo_4::load_file()
 {
     auto file_path = QFileDialog::getOpenFileName(this, tr("Files"), QDir::currentPath(), "*.*");
     if (file_path.isEmpty()) {
@@ -86,7 +86,7 @@ void func4::load_file()
     push_data(data);
 }
 
-QString func4::create_id_trans(int pair)
+QString TestJsonToLawinfo_4::create_id_trans(int pair)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -98,7 +98,7 @@ QString func4::create_id_trans(int pair)
     return info;
 }
 
-void func4::fill_table(int cnt_beam, int cnt_id_trans)
+void TestJsonToLawinfo_4::fill_table(int cnt_beam, int cnt_id_trans)
 {
     ui->table->setRowCount(cnt_beam);
     for (int i = 0; i < ui->table->rowCount(); ++i) {
@@ -108,7 +108,7 @@ void func4::fill_table(int cnt_beam, int cnt_id_trans)
     }
 }
 
-void func4::push_data(QByteArray data)
+void TestJsonToLawinfo_4::push_data(QByteArray data)
 {
     auto data_0 = data.mid(0, data.size() / 2);
     auto data_1 = data.mid(data.size() / 2, data.size() / 2);

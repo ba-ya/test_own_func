@@ -1,19 +1,19 @@
-﻿#ifndef FUNC3_H
-#define FUNC3_H
+#ifndef TESTDOCKWIDGET_3_H
+#define TESTDOCKWIDGET_3_H
 
 #include <QMainWindow>
 
 namespace Ui {
-class func3;
+class TestDockWidget_3;
 }
 
-class func3 : public QMainWindow
+class TestDockWidget_3 : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit func3(QWidget *parent = nullptr);
-    ~func3();
+    explicit TestDockWidget_3(QWidget *parent = nullptr);
+    ~TestDockWidget_3();
 
 private:
     void init();
@@ -28,8 +28,8 @@ private:
     void remove_docks(const QList<QDockWidget*> dock);
 
 private:
-    Ui::func3 *ui;
+    Ui::TestDockWidget_3 *ui;
     QList<QDockWidget*> docks;
 };
 
-#endif // FUNC3_H
+#endif // TESTDOCKWIDGET_3_H

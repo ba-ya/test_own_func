@@ -7,7 +7,7 @@
 
 ## func3, dockwidget
 
-![image-20250808090849765](README.assets/image-20250808090849765.png)
+![image-20250808093646485](README.assets/image-20250808093646485.png)
 
 ## func4, 解析tofs json
 

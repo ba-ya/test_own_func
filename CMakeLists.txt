@@ -21,22 +21,22 @@ include_directories(
 
 set(PROJECT_SOURCES
         main.cpp
-        4/func4.cpp
-        4/func4.h
-        4/func4.ui
+        4/TestJsonToLawinfo_4.cpp
+        4/TestJsonToLawinfo_4.h
+        4/TestJsonToLawinfo_4.ui
         4/parameter_tof_json.h
 
-        3/func3.cpp
-        3/func3.h
-        3/func3.ui
+        3/TestDockWidget_3.cpp
+        3/TestDockWidget_3.h
+        3/TestDockWidget_3.ui
 
-        2/func2.cpp
-        2/func2.h
-        2/func2.ui
+        2/TestUdpHeart_2.cpp
+        2/TestUdpHeart_2.h
+        2/TestUdpHeart_2.ui
 
-        1/func1.cpp
-        1/func1.h
-        1/func1.ui
+        1/TestApertureCheck_1.cpp
+        1/TestApertureCheck_1.h
+        1/TestApertureCheck_1.ui
         headers.h
 )
 

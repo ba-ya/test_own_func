@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>func2</class>
- <widget class="QWidget" name="func2">
+ <class>TestUdpHeart_2</class>
+ <widget class="QWidget" name="TestUdpHeart_2">
   <property name="geometry">
    <rect>
     <x>0</x>
