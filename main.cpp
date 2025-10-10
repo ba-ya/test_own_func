@@ -1,11 +1,17 @@
 ﻿#include "headers.h"
 #include <QApplication>
 
-#define test2
+#define test5
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+#ifdef test5
+    // 判断信号是哪个函数发送的
+    MultiSignalsOneSlot w;
+    w.show();
+#endif
+
 #ifdef test4
     // sdk, 解析json格式的tof,并设置到lawinfo里面
     TestJsonToLawinfo_4 w;

@@ -17,10 +17,15 @@ include_directories(
         2/
         3/
         4/
+        5/
 )
 
 set(PROJECT_SOURCES
         main.cpp
+        5/multi_signals_one_slot.cpp
+        5/multi_signals_one_slot.h
+        5/multi_signals_one_slot.ui
+
         4/TestJsonToLawinfo_4.cpp
         4/TestJsonToLawinfo_4.h
         4/TestJsonToLawinfo_4.ui

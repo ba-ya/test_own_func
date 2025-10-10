@@ -5,5 +5,6 @@
 #include "TestUdpHeart_2.h"
 #include "TestDockWidget_3.h"
 #include "TestJsonToLawinfo_4.h"
+#include "multi_signals_one_slot.h"
 
 #endif // HEADERS_H
