@@ -34,6 +34,8 @@ private slots:
     void on_btn_2_released();
     void do_something(int type);
 
+    void on_btn_clear_released();
+
 private:
     Ui::MultiSignalsOneSlot *ui;
 };

@@ -22,6 +22,7 @@ include_directories(
 
 set(PROJECT_SOURCES
         main.cpp
+
         5/multi_signals_one_slot.cpp
         5/multi_signals_one_slot.h
         5/multi_signals_one_slot.ui
