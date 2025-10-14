@@ -18,10 +18,12 @@ include_directories(
         3/
         4/
         5/
+        6/
 )
 
 set(PROJECT_SOURCES
         main.cpp
+        6/solution.h
 
         5/multi_signals_one_slot.cpp
         5/multi_signals_one_slot.h
