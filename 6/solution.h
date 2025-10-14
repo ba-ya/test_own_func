@@ -5,10 +5,10 @@
 #include <vector>
 #include <QDebug>
 
-using namespace std;
+    using namespace std;
 
-//----------------------相向双指针1
-namespace TwoPointersTowards1 {
+    ///----------------------相向双指针1
+    namespace TwoPointersTowards1 {
     // 15,三数之和等于0
     vector<vector<int>> threeSum(vector<int>& nums) {
         vector<vector<int>> res;
@@ -208,6 +208,127 @@ namespace TwoPointersTowards1 {
         }
         return count;
     }
-};
+    };
+
+    ///----------------------相向双指针2
+    namespace TwoPointersTowards2 {
+    // 11给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
+    int maxArea(vector<int>& height) {
+        int ans = 0;
+        int left = 0;
+        int right = height.size() - 1;
+        while (left < right) {
+            int area = (right - left) * min(height[left], height[right]);
+            ans = max(ans, area);
+            height[left] < height[right] ? left++ : right--;
+        }
+        return ans;
+    }
+
+    // 42接雨水
+    int trap(vector<int>& height) {
+        // 方法1, 数组计算前后缀
+        // 空间复杂度O(n)
+#if 0
+        int ans = 0;
+        int n = height.size();
+        vector<int> pre_max(n, 0);
+        vector<int> suf_max(n, 0);
+        // pre
+        pre_max[0] = height[0];
+        for (int i = 1; i < n; ++i) {
+            pre_max[i] = std::max(pre_max[i - 1], height[i]);
+        }
+        // suf
+        suf_max[n - 1] = height[n - 1];
+        for (int i = n - 2; i >= 0 ; --i) {
+            suf_fix[i] = max(suf_fix[i + 1], height[i]);
+        }
+        // 计算容量,
+        for (int i = 0; i < n; i++) {
+            ans += min(pre_max[i], suf_fix[i]) - height[i];
+        }
+        return ans;
+#endif
+        // 方法2,变量存储前后缀
+        // 空间复杂度O(1)
+        int n = height.size();
+        int ans = 0;
+        int left = 0;
+        int right = n - 1;
+        int pre_max = 0;
+        int suf_max = 0;
+        // 双向指针,判断条件都应该是left<right
+        // < or <= 都可以, 等于的时候接不到水
+        while (left < right) {
+            pre_max = max(pre_max, height[left]);
+            suf_max = max(suf_max, height[right]);
+            if (pre_max < suf_max) {
+                ans += pre_max - height[left];
+                left++;
+            } else {
+                ans += suf_max - height[right];
+                right--;
+            }
+        }
+        return ans;
+    }
+
+    // 125验证回文串
+    bool isPalindrome(string s) {
+        // remove space
+        auto new_end = remove_if(s.begin(), s.end(), [](unsigned char c) {
+            return !isalnum(c);
+        });
+        s.erase(new_end, s.end());
+        // to loweer
+        transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+        int n = s.size();
+        int left = 0;
+        int right = n - 1;
+        bool flag = true;
+        while (left < right) {
+            if (s.at(left) != s.at(right)) {
+                flag = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+        return flag;
+    }
+
+    // 1105给植物浇水
+    int minimumRefill(vector<int>& plants, int capacityA, int capacityB) {
+        int ans = 0;
+        int n = plants.size();
+        int left = 0;
+        int right = n - 1;
+        int left_a = capacityA;
+        int left_b = capacityB;
+        while(left <= right) {
+            // A
+            if (left_a < plants[left]) {
+                left_a = capacityA;
+                ans++;
+            }
+            left_a -= plants[left];
+            left++;
+            // B
+            if (left_b < plants[right]) {
+                left_b = capacityB;
+                ans++;
+            }
+            left_b -= plants[right];
+            right--;
+        }
+        if (left == right) {
+            ans += plants[left] > max(left_a, left_b);
+        }
+        return ans;
+    }
+
+    }
 
 #endif // SOLUTION_H

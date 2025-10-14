@@ -8,13 +8,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 #ifdef test6
-    // std::vector<int> vec = {-1,1,2,3,1};
-    // std::vector<int> vec = {-1,2,1,-4};
-    // std::vector<int> vec = {2,2,2,2,2};
-    std::vector<int> vec = {2,2,3,4};
+    std::vector<int> vec = {2,2,3,3};
     int target = 8;
-    qDebug() << vec << target;
-    qDebug() << TwoPointersTowards1::triangleNumber(vec);
+    // qDebug() << TwoPointersTowards1::triangleNumber(vec);
+    TwoPointersTowards2::minimumRefill(vec, 5, 5);
 #endif
 
 #ifdef test5
