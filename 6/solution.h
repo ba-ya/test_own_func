@@ -559,8 +559,9 @@
         return ans < 0 ? -1 : n - ans;
     }
 
-    // 1234替换子串得到平衡字符串, 参考(不太懂)
+    // 1234最小替换子串得到平衡字符串, 参考(不太懂)
     int balancedString(string s) {
+        // 记录的是待替换子串的出现次数
         int cnt['W' + 1]{};
         for (char c : s) {
             cnt[c]++;
@@ -576,18 +577,23 @@
         int ans = n, left = 0;
         for (int right = 0; right < n; right++) {
             cnt[s.at(right)]--;
-            // 代替换子串之外都是正常的或者待填充的
+            // 替换子串之外,即待替换子串都是正常的或者待填充的
             while (cnt['Q'] <= target && cnt['W'] <= target
                    && cnt['E'] <= target && cnt['R'] <= target) {
                 ans = min(ans, right - left + 1);
                 cnt[s[left]]++;
-                left++;
+                left++;// 从替换子串挪一个字符到待替换子串
             }
         }
         return ans;
 
     }
 
+    // 76最小覆盖子串,参考
+    string minWindow(string s, string t) {
+        // 参考
+
+    }
     }
 
 #endif // SOLUTION_H
