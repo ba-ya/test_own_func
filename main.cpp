@@ -8,10 +8,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 #ifdef test6
-    std::vector<int> vec = {1,1,4,2,3};
-    std::vector<int> vec2 = {1,4,2,3,1};
+    std::vector<int> vec = {0, 1, 3, 5, 6};
     int target = 8;
-    SlidingWindow::minWindow("aa", "aa");
+    BinarySearch::hIndex(vec);
 #endif
 
 #ifdef test5

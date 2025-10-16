@@ -631,4 +631,192 @@
     }
     }
 
+    ///----------------------二分查找, 11
+    namespace BinarySearch {
+    // 34在排序数组查找元素第一个和最后一个位置
+    vector<int> searchRange(vector<int>& nums, int target) {
+        // 返回 >= target的一个元素id
+        auto lower_bound = [](vector<int>& nums, int target) {
+            // 双开区间(left, right)
+            int left = -1;
+            int right = nums.size();
+            while (left + 1 < right) {
+                int mid = left + (right - left) / 2;
+                if (nums[mid] >= target) {
+                    right = mid;
+                } else {
+                    left = mid;
+                }
+            }
+            return right;
+        };
+        // >= target
+        int start = lower_bound(nums, target);
+        if (start == nums.size() || nums[start] != target) {
+            return {-1, -1};
+        }
+        // <= target 即 >target 即 >= (target + 1) 对应id的左边一个元素
+        // 有start,end必存在,不用判断end == -1
+        int end = lower_bound(nums, target + 1) - 1;
+        return {start, end};
+    }
+
+    // 2529正整数和负整数的最大计数
+    int maximumCount(vector<int>& nums) {
+        // (left, right), >= target
+        auto lower_bound = [](vector<int>& nums, int target) {
+            int left = -1;
+            int right = nums.size();
+            while (left + 1 < right) {
+                int mid = left + (right - left) / 2;
+                if (nums[mid] >= target) {
+                    right = mid;
+                } else {
+                    left = mid;
+                }
+            }
+            return right;
+        };
+
+        int n = nums.size();
+        int target = 0;
+        // < target -> (>= target) - 1
+        int start_0 = lower_bound(nums, target) - 1;
+        // > target -> >= (target + 1)
+        int end_0 = lower_bound(nums, target + 1);
+        return max(start_0 + 1, n - end_0);
+    }
+
+    // 2300咒语和药水的成功对数
+    vector<int> successfulPairs(vector<int>& spells, vector<int>& potions, long long success) {
+        int n = spells.size();
+        int m = potions.size();
+        sort(potions.begin(), potions.end());
+        vector<int> ans(n, 0);
+        for (int i = 0; i < n; i++) {
+            int left = -1;
+            int right = m;
+            while (left + 1 < right) {
+                int mid = left + (right - left) / 2;
+                if ((long long)potions[mid] * (long long)spells[i] >= success) {
+                    right = mid;
+                } else {
+                    left = mid;
+                }
+            }
+            ans[i] = m - right;
+        }
+        return ans;
+    }
+
+    // 2563统计公平数对的数目,参考
+    // 自己复制vector超时了
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        // 第一个满足>=target的位置, 这里传的参数是[left, right)
+        auto lower_bound = [](vector<int> &nums, int left, int right, int target) {
+            int l = left - 1;
+            int r = right;
+            while (l + 1 < r) {
+                int mid = l + (r - l) / 2;
+                if (nums[mid] >= target) {
+                    r = mid;
+                } else {
+                    l = mid;
+                }
+            }
+            return r;
+        };
+        // 第一个满足>target(等价于>= target + 1)的位置
+        auto upper_bound = [lower_bound](vector<int> &nums, int left, int right, int target){
+            return lower_bound(nums, left, right, target + 1);
+        };
+
+        long long ans = 0;
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            int start = lower_bound(nums, 0, i, lower - nums[i]);
+            int end = upper_bound(nums, 0, i, upper - nums[i]);
+            // [start, end - 1]区间所有位置都满足
+            // cnt = end - 1 - start + 1 = end - start
+            ans += end - start;
+        }
+        return ans;
+    }
+
+    // 2080区间查询数字的频率, 参考
+    // 存每个数字出现的下标,下标数组是递增的
+    class RangeFreqQuery {
+    private:
+        // 每个数字的下标列表
+        unordered_map<int, vector<int>> pos;
+
+    public:
+        RangeFreqQuery(vector<int>& arr) {
+            for (int i = 0; i < arr.size(); ++i) {
+                pos[arr[i]].push_back(i);
+            }
+        }
+
+        int query(int left, int right, int value) {
+            auto it = pos.find(value);
+            if (it == pos.end()) {
+                return 0;
+            }
+            auto &vec = it->second;
+            int start = lower_bound(vec, left);
+            int end = upper_bound(vec, right);
+            return end - start;
+        }
+
+    private:
+        // 第一个>=target
+        int lower_bound(vector<int> &nums, int target) {
+            int l = - 1;
+            int r = nums.size();
+            while (l + 1 < r) {
+                int mid = l + (r - l) / 2;
+                if (nums[mid] >= target) {
+                    r = mid;
+                } else {
+                    l = mid;
+                }
+            }
+            return r;
+        }
+        // 第一个>target
+        int upper_bound(vector<int> &nums, int target) {
+            return lower_bound(nums, target + 1);
+        }
+    };
+
+    // 275, H指数
+    int hIndex(vector<int>& citations) {
+        auto lower_bound = [](vector<int>& nums, int left, int right, int target) {
+            int l = left - 1;
+            int r = right;
+            while (l + 1 < r) {
+                int mid = l + (r - l) / 2;
+                if (nums[mid] >= target) {
+                    r = mid;
+                } else {
+                    l = mid;
+                }
+            }
+            return r;
+        };
+        auto upper_bound = [lower_bound](vector<int>& nums, int left, int right, int target) {
+            return lower_bound(nums, left, right, target + 1);
+        };
+        int ans = 0;
+        for (int i = 0; i <= citations.size(); i++) {
+            int end = upper_bound(citations, 0, i, i);
+            if (end == i) {
+                ans = max(ans, end);
+            }
+            qDebug() << vector(citations.begin(), citations.begin() + i) << end << ans;
+        }
+        return ans;
+    }
+    }
 #endif // SOLUTION_H
