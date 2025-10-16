@@ -589,10 +589,45 @@
 
     }
 
-    // 76最小覆盖子串,参考
+    // 76最小覆盖子串,参考,
+    // 写了版错误的,测试用例能通过144 / 268
     string minWindow(string s, string t) {
-        // 参考
+        auto is_covered = [](int cnt_s[], int cnt_t[]) {
+            for (int i = 'a'; i <= 'z'; ++i) {
+                if (cnt_s[i] < cnt_t[i]) {
+                    return false;
+                }
+            }
+            for (int i = 'A'; i <= 'Z'; ++i) {
+                if (cnt_s[i] < cnt_t[i]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        // 128是asc码的数目
+        int cnt_s[128]{0};
+        int cnt_t[128]{0};
+        for (char c : t) {
+            cnt_t[c] += 1;
+        }
 
+        int ans_left = -1;
+        int ans_right = s.size();
+        int left = 0;
+        for (int right = 0; right < s.size(); right++) {
+            cnt_s[s.at(right)] += 1;
+            // 笔误,之前两个参数都写成cnt_s了
+            while (is_covered(cnt_s, cnt_t)) {
+                if (right - left < ans_right - ans_left) {
+                    ans_right = right;
+                    ans_left = left;
+                }
+                cnt_s[s.at(left)] -= 1;
+                left++;
+            }
+        }
+        return ans_left < 0 ? "" : s.substr(ans_left, ans_right - ans_left + 1);
     }
     }
 
