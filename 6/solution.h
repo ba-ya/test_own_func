@@ -792,31 +792,30 @@
 
     // 275, H指数
     int hIndex(vector<int>& citations) {
-        auto lower_bound = [](vector<int>& nums, int left, int right, int target) {
-            int l = left - 1;
-            int r = right;
-            while (l + 1 < r) {
-                int mid = l + (r - l) / 2;
-                if (nums[mid] >= target) {
-                    r = mid;
-                } else {
-                    l = mid;
-                }
-            }
-            return r;
-        };
-        auto upper_bound = [lower_bound](vector<int>& nums, int left, int right, int target) {
-            return lower_bound(nums, left, right, target + 1);
-        };
-        int ans = 0;
-        for (int i = 0; i <= citations.size(); i++) {
-            int end = upper_bound(citations, 0, i, i);
-            if (end == i) {
-                ans = max(ans, end);
-            }
-            qDebug() << vector(citations.begin(), citations.begin() + i) << end << ans;
+        int n = citations.size();
+        // 1篇必定h值为1, 二分范围可以是[1, n]
+        if (n == 1) {
+            return 1;
         }
-        return ans;
+        int ans = 0;
+        // 二分答案
+        // 循环不变量：
+        // left 的回答一定为「是」
+        // right 的回答一定为「否」
+        int left= 0;
+        int right = n + 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            // 至少有mid篇大于mid, 最大的mid个数需要大于mid
+            if (citations[n - mid] >= mid) {
+                // 此时可以判断是来,mid左边都是满足条件的,left可以更新
+                left = mid;
+            } else {
+                right = mid;
+            }
+        }
+        //
+        return left;
     }
     }
 #endif // SOLUTION_H
