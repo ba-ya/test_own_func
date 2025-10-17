@@ -8,9 +8,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 #ifdef test6
-    std::vector<int> vec = {0, 1, 3, 5, 6};
+    std::vector<int> vec = {30,11,23,4,20};
     int target = 8;
-    BinarySearch::hIndex(vec);
+    BinarySearch::minimumTime(vec, 1);
 #endif
 
 #ifdef test5

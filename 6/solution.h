@@ -790,23 +790,20 @@
         }
     };
 
-    // 275, H指数
+    // 275, H指数, 参考
     int hIndex(vector<int>& citations) {
         int n = citations.size();
         // 1篇必定h值为1, 二分范围可以是[1, n]
-        if (n == 1) {
-            return 1;
-        }
         int ans = 0;
         // 二分答案
         // 循环不变量：
-        // left 的回答一定为「是」
-        // right 的回答一定为「否」
-        int left= 0;
-        int right = n + 1;
+        // left - 1的回答一定为「是」
+        // right + 1 的回答一定为「否」
+        int left= 0;// 不满足条件
+        int right = n; // 满足条件
         while (left + 1 < right) {
             int mid = left + (right - left) / 2;
-            // 至少有mid篇大于mid, 最大的mid个数需要大于mid
+            // 至少有mid篇大于mid, 右边较大的mid个数需要大于mid
             if (citations[n - mid] >= mid) {
                 // 此时可以判断是来,mid左边都是满足条件的,left可以更新
                 left = mid;
@@ -814,8 +811,130 @@
                 right = mid;
             }
         }
-        //
         return left;
+    }
+
+    // 875爱吃香蕉的珂珂, 参考
+    int minEatingSpeed(vector<int>& piles, int h) {
+        // 吃完某堆香蕉用的时间, p / k 向上取整 等价于  (p - 1) / k + 1 向下取整,
+        // 从 [0, n - 1]范围内, 所有的和 <= h
+        auto check = [&](int k) {
+            int sum = 0;
+            for (auto p : piles) {
+                sum += (p - 1) / k + 1;
+                if (sum > h) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        int max = *max_element(piles.begin(), piles.end());
+        // 二分的是答案k(每小时吃的香蕉数), 区间是[1, max]
+        int left = 0;// 循环不变量, 一定不满足条件
+        int right = max;// 循环不变量, 一定满足条件
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            if (check(mid)) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+
+    // 2187完成旅途的最少时间
+    long long minimumTime(vector<int>& time, int totalTrips) {
+        // k / t 向下取整
+        // 所有的和是旅程数,需要大于等于totalTrips
+        auto check = [&](long long k) {
+            long long sum = 0;
+            for (auto &t : time) {
+                sum += k / t;
+            }
+            return sum >= totalTrips;
+        };
+
+        long long min = *min_element(time.begin(), time.end());
+        // 同样二分答案, 区间[1, 最小时间*totalTrips]
+        long long left = 0; // 循环不变量, check(left)必不满足条件
+        long long right = (long long)min * totalTrips;// 循环不变量, check(right)必满足条件
+        while (left + 1 < right) {
+            long long mid = left + (right - left) / 2;
+            if (check(mid)) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+
+    // 2861最大合金数, 参考
+    int maxNumberOfAlloys(int n, int k, int budget,// n类金属,k台设备
+                          vector<vector<int>>& composition, // 制造合金需要的每类金属的数目
+                          vector<int>& stock, //已有的
+                          vector<int>& cost) {// 每类金属的价格
+        // 满足条件的最左边一个数, 一份合金也需要,必满足
+        int ans = 0;
+        // 满足条件的最右边一个数,
+        // 假设合金只需要一份金属,价格为1,此时合金数目最多就是 min(存量) + 预算/ 1
+        int max = *min_element(stock.begin(), stock.end()) + budget;
+        auto check = [&](int comp_id, int cnt_rst) {
+            auto &need = composition[comp_id];
+            long long sum = 0;
+            for (int i = 0; i < need.size(); i++) {
+                long long needs = (long long)need[i] * cnt_rst;
+                if (needs > stock[i]) {
+                    sum += (needs - stock[i]) * cost[i];
+                    if (sum > budget) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+        // 设备数目K
+        for (int i = 0; i < k; i++) {
+            // 0已经知道是必定满足条件的了,二分区间可以不包含了
+            // 所以left = 0, 这里把left作为满足条件, right作为不满足的
+            // 二分区间(0, max + 1),
+            int left = ans;// 循环不变量, 必满足
+            int right = max + 1; // 循环不变量, 必不满足
+            while (left + 1 < right) {
+                int mid = left + (right - left) / 2;
+                (check(i, mid) ? left : right) = mid;
+            }
+            ans = left;
+        }
+        return ans;
+
+    }
+
+    // 2439最大化数组里的最小值, 参考
+    // 自己写的超时了,但思路是对的,第一个数是最大值的时候就找到答案了
+    int minimizeArrayValue(vector<int>& nums) {
+        // 所有超过limit的部分从右向左移动,
+        // 到最左边的时候能不能小于limit
+        auto check = [&](int limit) ->bool {
+            long long extra = 0;
+            for (int i = nums.size() - 1; i > 0; i--) {
+                extra = max(nums[i] + extra - limit, 0LL);
+            }
+            return nums[0] + extra <= limit;
+        };
+
+        int min = *min_element(nums.begin(), nums.end());
+        int max = *max_element(nums.begin(), nums.end());
+        int left = min - 1;// 循环不变量, left一定不大于数组内所有数, 不满足
+        int right = max; // 循环不变量, right一定大于数组内所有数,满足
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            (check(mid) ? right : left) = mid;
+        }
+        return right;
+
     }
     }
 #endif // SOLUTION_H
