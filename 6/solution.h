@@ -631,8 +631,8 @@
     }
     }
 
-    ///----------------------二分查找, 11
-    namespace BinarySearch {
+    ///----------------------二分查找1, 11
+    namespace BinarySearch1 {
     // 34在排序数组查找元素第一个和最后一个位置
     vector<int> searchRange(vector<int>& nums, int target) {
         // 返回 >= target的一个元素id
@@ -936,5 +936,89 @@
         return right;
 
     }
+
+    // 2517礼盒的最大甜蜜度, 参考
+    int maximumTastiness(vector<int>& price, int k) {
+        // 甜蜜度越大, 可选的种类k越小
+        auto f = [&](int d) ->int {
+            int cnt = 1, pre = price[0];
+            for (auto p : price) {
+                if (p - pre >= d) {
+                    cnt++;
+                    pre = p;
+                }
+            }
+            return cnt;
+        };
+
+        sort(price.begin(), price.end());
+        // price[0] + (k - 1) * d <= price[n - 1]
+        // d <= (price[n - 1] - price[0]) / (k - 1)
+        // f(d + 1) < k
+        int left = 0;// f(left) >= k,
+        int right = (price.back() - price[0]) / (k - 1) + 1;// f(right) < k
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            (f(mid) >= k ? left : right) = mid;
+        }
+        return left;
+    }
+    }
+
+    ///----------------------二分查找2, 6
+    namespace BinarySearch2 {
+    // 162寻找峰值
+    int findPeakElement(vector<int>& nums) {
+        // [0, n - 2]->(-1, n - 1)
+        // while里面有mid + 1,所有范围限制为n-2
+        int n = nums.size();
+        int left = -1;
+        int right = n - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > nums[mid + 1]) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return right;
+    }
+
+    // 153寻找旋转排序数组中的最小值
+    int findMin(vector<int>& nums) {
+        // [0, n-2]
+        int n = nums.size();
+        int left = -1;//不满足
+        int right = n - 1;// 满足
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            (nums[mid] > nums.back() ? left : right) = mid;
+        }
+        return nums[right];
+    }
+
+    // 33搜索旋转排序数组
+    int search(vector<int>& nums, int target) {
+        // [0, n - 2]
+        int last = nums.back();
+        auto check = [&](int i) {
+            int x = nums[i];
+            if (x > last) {
+                return target > last && x >= target;
+            }
+            return target > last || x >= target;
+        };
+
+        int n = nums.size();
+        int left = -1;
+        int right = n - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            (check(nums[mid]) ? right : left) = mid;
+        }
+        return nums[right] == target ? right : -1;
+    }
+
     }
 #endif // SOLUTION_H
