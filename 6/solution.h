@@ -1020,5 +1020,47 @@
         return nums[right] == target ? right : -1;
     }
 
+    // 74搜索二维矩阵
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        auto lower_bound = [&](int i, int target) {
+            auto &vec = matrix[i];
+            int left = -1;
+            int right = vec.size() - 1;
+            while (left + 1 < right) {
+                int mid = left + (right - left ) / 2;
+                (vec[mid] >= target ? right : left) = mid;
+            }
+            return right;
+        };
+        int m  = matrix.size();
+        int n = matrix[0].size();
+        // [0, m - 1]
+        int left = -1;
+        int right = m - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            (matrix[mid].back() >= target ? right : left) = mid;
+        }
+        int k = lower_bound(right, target);
+        return k > 0 && k < n && matrix[right][k] == target;
+
+    }
+
+    // 1901寻找峰值2
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        auto index_of_max = [](vector<int> &vec) -> int {
+            return max_element(vec.begin(), vec.end()) - vec.begin();
+        };
+        // 二分区间[0, m - 2]
+        int m = mat.size();
+        int left = -1;
+        int right = m - 1;
+        while (left + 1 < right) {
+            int i = left + (right - left) / 2;
+            int j = index_of_max(mat[i]);
+            (mat[i][j] > mat[i + 1][j] ? right : left) = i;
+        }
+
+    }
     }
 #endif // SOLUTION_H
