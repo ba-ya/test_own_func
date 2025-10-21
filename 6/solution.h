@@ -1058,9 +1058,9 @@
         while (left + 1 < right) {
             int i = left + (right - left) / 2;
             int j = index_of_max(mat[i]);
-            (mat[i][j] > mat[i + 1][j] ? right : left) = i;
+            (mat[i][j] >= mat[i + 1][j] ? right : left) = i;
         }
-
+        return {right, index_of_max(mat[right])};
     }
     }
 #endif // SOLUTION_H
