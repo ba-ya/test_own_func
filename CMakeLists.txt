@@ -19,11 +19,20 @@ include_directories(
         4/
         5/
         6/
+        7/
 )
 
 set(PROJECT_SOURCES
         main.cpp
-        6/solution.h
+
+        7/aboutui.cpp
+        7/aboutui.h
+        7/aboutui.ui
+
+        6/00solution.h
+        6/01TwoPointersTowards.h
+        6/02SlidingWindow.h
+        6/03BinarySearch.h
 
         5/multi_signals_one_slot.cpp
         5/multi_signals_one_slot.h
@@ -53,6 +62,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         icon.rc
+        image.qrc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET test_own_func APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

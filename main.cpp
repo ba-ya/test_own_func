@@ -1,11 +1,16 @@
 ﻿#include "headers.h"
 #include <QApplication>
-#include "solution.h"
-#define test6
+#include "00solution.h"
+#define test7
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+#ifdef test7
+    AboutUI w;
+    w.show();
+#endif
 
 #ifdef test6
     std::vector<int> vec = {30,11,23,4,20};
