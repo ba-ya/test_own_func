@@ -29,12 +29,6 @@ set(PROJECT_SOURCES
         7/aboutui.h
         7/aboutui.ui
 
-        6/00solution.h
-        6/01TwoPointersTowards.h
-        6/02SlidingWindow.h
-        6/03BinarySearch.h
-        6/04LinkedList.h
-
         5/multi_signals_one_slot.cpp
         5/multi_signals_one_slot.h
         5/multi_signals_one_slot.ui
