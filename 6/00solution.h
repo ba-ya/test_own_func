@@ -13,6 +13,7 @@ using namespace std;
 ///----------------------TwoPointersTowards2, 4 * 1
 ///----------------------SlidingWindow, 12 * 1
 ///----------------------BinarySearch1, 11 * 1
-///----------------------BinarySearch2, 6
+///----------------------BinarySearch2, 6 * 1
+///----------------------LinkedList_Reverse, 6
 
 #endif // 00SOLUTION_H

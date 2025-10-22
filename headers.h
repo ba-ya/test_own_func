@@ -8,4 +8,9 @@
 #include "multi_signals_one_slot.h"
 #include "aboutui.h"
 
+#include "01TwoPointersTowards.h"
+#include "02SlidingWindow.h"
+#include "03BinarySearch.h"
+#include "04LinkedList.h"
+
 #endif // HEADERS_H

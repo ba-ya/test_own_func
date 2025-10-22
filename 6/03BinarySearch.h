@@ -370,8 +370,10 @@ int findMin(vector<int>& nums) {
 
 // 33搜索旋转排序数组
 int search(vector<int>& nums, int target) {
+    // 只讨论 target <= x的情况
     // [0, n - 2]
     int last = nums.back();
+    // 返回x在target的右侧吗
     auto check = [&](int i) {
         int x = nums[i];
         if (x > last) {
@@ -385,7 +387,7 @@ int search(vector<int>& nums, int target) {
     int right = n - 1;
     while (left + 1 < right) {
         int mid = left + (right - left) / 2;
-        (check(nums[mid]) ? right : left) = mid;
+        (check(mid) ? right : left) = mid;
     }
     return nums[right] == target ? right : -1;
 }
@@ -432,6 +434,26 @@ vector<int> findPeakGrid(vector<vector<int>>& mat) {
     }
     return {right, index_of_max(mat[right])};
 }
+
+// 154寻找旋转排序数组里的最小值, 可能有重复元素
+int findMin2(vector<int>& nums) {
+    // 把nums[right]当作最大值
+    int n = nums.size();
+    int left = -1;
+    int right = n - 1;
+    while (left + 1 < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == nums[right]) {
+            right--;
+        } else if (nums[mid] > nums[right]) {
+            right = mid;
+        } else {
+            left = mid;
+        }
+    }
+    return nums[right];
+}
+
 }
 
 #endif // _3BINARYSEARCH_H
