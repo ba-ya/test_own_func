@@ -15,5 +15,7 @@ using namespace std;
 ///----------------------BinarySearch1, 11 * 1
 ///----------------------BinarySearch2, 6 * 1
 ///----------------------LinkedList_Reverse, 6
+///----------------------LinkedList_QuickNSlow, 5
+///----------------------LinkedList_Delete, 7
 
 #endif // 00SOLUTION_H

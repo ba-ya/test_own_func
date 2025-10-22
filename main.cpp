@@ -1,7 +1,6 @@
 ﻿#include "headers.h"
 #include <QApplication>
-#include "00solution.h"
-#define test7
+#define test6
 
 int main(int argc, char *argv[])
 {
