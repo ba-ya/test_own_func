@@ -19,15 +19,14 @@ include_directories(
         4/
         5/
         6/
-        7/
 )
 
 set(PROJECT_SOURCES
         main.cpp
 
-        7/aboutui.cpp
-        7/aboutui.h
-        7/aboutui.ui
+        6/aboutui.cpp
+        6/aboutui.h
+        6/aboutui.ui
 
         5/multi_signals_one_slot.cpp
         5/multi_signals_one_slot.h

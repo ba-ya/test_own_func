@@ -6,12 +6,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-#ifdef test7
+#ifdef test6
     AboutUI w;
     w.show();
-#endif
-
-#ifdef test6
 #endif
 
 #ifdef test5

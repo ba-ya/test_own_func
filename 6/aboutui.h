@@ -17,6 +17,9 @@ public:
 
 private:
     void init();
+    void _1_triangle_btn();
+    void _2_radius();
+    void _3_hover_press_exit();
 
 private:
     Ui::AboutUI *ui;
