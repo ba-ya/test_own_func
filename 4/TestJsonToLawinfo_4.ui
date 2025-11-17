@@ -67,6 +67,13 @@
    <item row="4" column="0">
     <widget class="QLineEdit" name="lineEdit_load"/>
    </item>
+   <item row="5" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

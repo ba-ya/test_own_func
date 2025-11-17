@@ -18,6 +18,7 @@ struct LawInfo
     std::vector<int32_t> elem_time{};
     std::vector<int32_t> tx_delays{};
     std::vector<int32_t> rx_delays{};
+    int32_t beam_delay{};
 };
 }
 struct TofJsonManger {
@@ -40,15 +41,21 @@ struct TofJsonManger {
             auto group_id = get_id(group_it.key());
             auto group_obj = group_it.value().toObject();
             QMap<int, tb::hal::LawInfo> laws;
+            auto min_delay = INT_MAX;
             for (auto beam_it = group_obj.begin(); beam_it != group_obj.end(); ++beam_it) {
                 auto beam_id = get_id(beam_it.key());
                 auto beam_array = beam_it.value().toArray();
                 QMap<int, int> tofs;
                 auto min_value = std::numeric_limits<int>::max();
                 auto max_value = std::numeric_limits<int>::min();
+                int origin_delay = 0;
                 for (auto id_trans_it = beam_array.begin(); id_trans_it != beam_array.end(); ++id_trans_it) {
                     auto id_trans_obj = id_trans_it->toObject();
                     for (auto id_trans = id_trans_obj.begin(); id_trans != id_trans_obj.end(); ++id_trans) {
+                        if (id_trans.key() == "delay") {
+                            origin_delay = id_trans.value().toInt();
+                            continue;
+                        }
                         auto trans_id = get_id(id_trans.key());
                         auto tof = id_trans.value().toInt();
                         tofs[trans_id] = tof;
@@ -65,11 +72,15 @@ struct TofJsonManger {
                 }
                 law.elem_min_time = min_value;
                 law.elem_max_time = max_value;
+                law.beam_delay = origin_delay;
                 laws[beam_id] = law;
+                // min delay
+                min_delay = std::min(min_delay, origin_delay);
             }
             law_infos[group_id] = laws;
+            min_delays[group_id] = min_delay;
         }
-#if 1
+#if 0
         QJsonObject root2;
         for (auto it = law_infos.cbegin(); it != law_infos.cend(); ++it) {
             QJsonObject group_obj;
@@ -107,12 +118,22 @@ struct TofJsonManger {
         if (!law_infos.contains(group_id)) {
             return {};
         }
+        int min_delay = get_min_delay(group_id);
         auto laws = law_infos[group_id];
         std::vector<tb::hal::LawInfo> rst_laws;
         for (auto &law : laws) {
+            law.beam_delay -= min_delay;
+            qDebug() << law.beam_delay + min_delay << law.beam_delay;
             rst_laws.push_back(law);
         }
         return rst_laws;
+    }
+
+    int get_min_delay(int group_id) {
+        if (!min_delays.contains(group_id)) {
+            return 0;
+        }
+        return min_delays[group_id];
     }
 
     QByteArray load_from_file(const QString &file_path) {
@@ -147,6 +168,7 @@ private:
 private:
     QMap<int, QByteArray> data_parts;
     QMap<int, QMap<int, tb::hal::LawInfo>> law_infos;
+    QMap<int, int> min_delays;
 
 };
 

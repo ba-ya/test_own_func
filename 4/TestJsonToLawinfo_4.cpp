@@ -66,6 +66,9 @@ void TestJsonToLawinfo_4::on_btn_create_released()
                 id_trans_obj[QString("id_trans %1").arg(k)] = k_value;
                 beam_array.push_back(id_trans_obj);
             }
+            QJsonObject delay_obj;
+            delay_obj["delay"] = (j + 1) * 10;
+            beam_array.push_back(delay_obj);
             group_obj[QString("beam %1").arg(j)] = beam_array;
         }
         root[QString("group %1").arg(i)] = group_obj;
@@ -116,3 +119,10 @@ void TestJsonToLawinfo_4::push_data(QByteArray data)
     manger.push_data(10, data_0);
     manger.completed();
 }
+
+void TestJsonToLawinfo_4::on_pushButton_released()
+{
+    qDebug() << "-----min delay" << manger.get_min_delay(0);
+    auto infos = manger.get_law_infos(0);
+}
+
